@@ -8,8 +8,8 @@
  * Description :
  *  
  */
+$this->context->view->registerJsFile($asset.'/tinymce.min.js');
 ?>
-<script language="JavaScript" src="<?=$asset?>/tinymce.min.js"></script>
 <?php
 if ($hasModel) {
     echo \yii\helpers\Html::activeTextarea($model, $attribute, $options);

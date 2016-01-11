@@ -1,30 +1,34 @@
 <?php
 /**
- * @copyright Copyright (c) 2013-2015 2amigOS! Consulting Group LLC
- * @link http://2amigos.us
- * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * Created by Ivoglent Nguyen
+ * Contact     :  ivoglent@gmail.com
+ * Project     : Yii2 Extensions
+ * Filename    : MediaEditor.php
+ * Datetime    : 8/20/2015 - 4:03 PM
+ * Description :
+ *
  */
 namespace ivoglent\yii2\media;
 
+use yii\base\InvalidConfigException;
+use yii\helpers\BaseUrl;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\widgets\InputWidget;
 
-/**
- *
- * TinyMCE renders a tinyMCE js plugin for WYSIWYG editing.
- *
- * @author Antonio Ramirez <amigo.cobos@gmail.com>
- * @link http://www.ramirezcobos.com/
- * @link http://www.2amigos.us/
- */
+
 class MediaEditor extends InputWidget
 {
 
     /**
+     * @var string $fileManagerUrl : Url to root of file manager directory
+     * required
+     */
+    public $fileManagerUrl ='';
+    /**
      * @var string the language to use. Defaults to null (en).
      */
-    public $language;
+    public $language='vi';
     /**
      * @var array the options for the TinyMCE JS plugin.
      * Please refer to the TinyMCE JS plugin Web page for possible options.
@@ -39,7 +43,32 @@ class MediaEditor extends InputWidget
     protected $assetDir ='';
     public function publishAssets($dir){
         $assets = \Yii::$app->assetManager->publish($dir);
-        return $this->assetDir =Config::baseUrl().'/'.$assets[1];
+        return $this->assetDir =$assets[1];
+    }
+    public function init(){
+        parent::init();
+        if(empty($this->fileManagerUrl)) throw new InvalidConfigException("Missing fileManagerUrl config");
+        if(empty($this->clientOptions))
+            $this->clientOptions =[];
+        $this->clientOptions =array_merge_recursive([
+            'plugins' => [
+                "advlist autolink lists link charmap print preview anchor",
+                "searchreplace visualblocks code fullscreen image",
+                "insertdatetime media table contextmenu paste responsivefilemanager"
+            ],
+            'valid_elements'=> '+*[*]',
+            'valid_children' => "+body[style]",
+            'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image| responsivefilemanager",
+            "external_filemanager_path"=>'',
+            "filemanager_title"=>"Photo management" ,
+            "filemanager_access_key"=>"i5FFXKzEEH67NuTMMqQChfYGMARRViZ" ,
+            "external_plugins" =>  [
+                "filemanager" => "plugins/responsivefilemanager/plugin.min.js"
+            ]
+        ],$this->clientOptions);
+        //print_r($this->clientOptions);exit;
+        if(empty($this->clientOptions['external_filemanager_path']))
+        $this->clientOptions['external_filemanager_path']= $this->fileManagerUrl .'/dialog.php?';
     }
     /**
      * @inheritdoc
@@ -55,7 +84,8 @@ class MediaEditor extends InputWidget
             'attribute' =>$this->attribute,
             'name' => $this->name,
             'value' => $this->value,
-            'options' =>$this->options
+            'options' =>$this->options,
+            'fileManagerUrl' =>$this->fileManagerUrl
         ]);
     }
 
