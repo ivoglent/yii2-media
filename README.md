@@ -15,7 +15,7 @@ echo \ivoglent\yii2\media\MediaEditor::widget([
 ```
 
 
-Note : Be careful with Response Filemanager config for security reasons.
+Note : Be careful with Responsive Filemanager config for security reasons.
 
 
 Screenshot :
