@@ -19,4 +19,4 @@ Note : Be careful with Response Filemanager config for security reasons.
 
 
 Screenshot :
-![yii2-media](screentshot.png)
+![yii2-media](screenshot.png)
