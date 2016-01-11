@@ -26,7 +26,7 @@ class MediaEditor extends InputWidget
      */
     public $fileManagerUrl ='';
     /**
-     * @var string the language to use. Defaults to null (en).
+     * @var string the language to use.
      */
     public $language='vi';
     /**
